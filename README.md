@@ -1,5 +1,7 @@
 # Sistema de Biblioteca - Refatoração com POO
 
+Nomes: Felipe Shinkae, Heitor Cortes, Paulo Amaral, José Guilherme, Matheus Ferreira
+
 Este projeto demonstra a refatoração de um sistema de biblioteca aplicando os princípios da Programação Orientada a Objetos (POO).
 
 ## Pilares da POO Implementados
