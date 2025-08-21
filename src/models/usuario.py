@@ -1,5 +1,5 @@
 from typing import List
-from src.models.emprestimo import Emprestimo
+from models.emprestimo import Emprestimo
 
 class Usuario:
     """Representa um usuário da biblioteca"""

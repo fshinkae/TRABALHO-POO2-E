@@ -1,6 +1,6 @@
-from src.controllers.biblioteca import Biblioteca
-from src.models.item import Livro, Revista
-from src.models.usuario import Usuario
+from controllers.biblioteca import Biblioteca
+from models.item import Livro, Revista
+from models.usuario import Usuario
 
 def demo():
     print(">>> Biblioteca base")
@@ -28,43 +28,50 @@ def demo():
         print("[3] Pesquisar EMPRÉSTIMOS (por item/usuário)")
         print("[0] Sair")
         op = input("Escolha: ").strip().lower()
-
-        if op == "0":
-            print("Até mais...")
-            break
-
-        if op == "1":
-            termo = input("Termo (se vazio lista todos): ").strip()
-            achados = biblioteca.pesquisar_itens(termo)
-            if not achados:
-                print("  Nenhum item encontrado.")
-            else:
+        
+        match op:
+            case "0":
+                print("Até mais...")
+                break
+            
+            
+            case "1":
+                termo = input("Termo (se vazio lista todos): ").strip()
+                achados = biblioteca.pesquisar_itens(termo)
+                if not achados:
+                    print("  Nenhum item encontrado.")
+                    continue
                 for item in achados:
                     print(f"  {item.codigo}: {item} | estoque={item.estoque}")
-
-        elif op == "2":
-            termo = input("Termo (se vazio lista todos): ").strip()
-            achados = biblioteca.pesquisar_usuarios(termo)
-            if not achados:
-                print("  Nenhum usuário encontrado.")
-            else:
+                    
+                    
+            case "2":
+                termo = input("Termo (se vazio lista todos): ").strip()
+                achados = biblioteca.pesquisar_usuarios(termo)
+                if not achados:
+                    print("  Nenhum usuário encontrado.")
+                    continue
                 for usuario in achados:
                     print(f"  {usuario.id_usuario}: {usuario.nome} | empréstimos={len(usuario.itens_emprestados)}")
-
-        elif op == "3":
-            termo = input("Termo (item/usuário; vazio lista todos): ").strip()
-            status = input("Status [enter=Todos | aberto | devolvido]: ").strip().lower() or None
-            if status not in (None, "aberto", "devolvido"):
-                print("  Status inválido. Usando 'Todos'.")
-                status = None
-            achados = biblioteca.pesquisar_emprestimos(termo, status=status)
-            if not achados:
-                print("  Nenhum empréstimo encontrado.")
-            else:
+                    
+                    
+            case "3":
+                termo = input("Termo (item/usuário; vazio lista todos): ").strip()
+                status = input("Status [enter=Todos | aberto | devolvido]: ").strip().lower() or None
+                if status not in (None, "aberto", "devolvido"):
+                    print("  Status inválido. Usando 'Todos'.")
+                    status = None
+                achados = biblioteca.pesquisar_emprestimos(termo, status=status)
+                if not achados:
+                    print("  Nenhum empréstimo encontrado.")
+                    continue
                 for emp in achados:
                     print("  ", emp)
-        else:
-            print("Opção inválida.")
+                    
+                    
+            case _:
+                print("Opção inválida.")
+        
 
 if __name__ == "__main__":
     demo()

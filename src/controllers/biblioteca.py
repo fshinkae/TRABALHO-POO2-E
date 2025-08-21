@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional
-from src.models.item import ItemBiblioteca
-from src.models.usuario import Usuario
-from src.models.emprestimo import Emprestimo
+from models.item import ItemBiblioteca
+from models.usuario import Usuario
+from models.emprestimo import Emprestimo
 
 class Biblioteca:
     """Gerencia o catálogo de itens, usuários e empréstimos da biblioteca"""
@@ -11,6 +11,22 @@ class Biblioteca:
         self._catalogo: Dict[str, ItemBiblioteca] = {}
         self._usuarios: Dict[str, Usuario] = {}
         self._emprestimos: List[Emprestimo] = []
+        
+    @property
+    def nome(self) -> str:
+        return self._nome
+    
+    @property
+    def catalogo(self) -> Dict[str, ItemBiblioteca]:
+        return self._catalogo
+    
+    @property
+    def usuarios(self) -> Dict[str, Usuario]:
+        return self._usuarios
+    
+    @property
+    def emprestimos(self) -> List[Emprestimo]:
+        return self._emprestimos
     
     def adicionar_item(self, item: ItemBiblioteca) -> None:
         """Adiciona um novo item ao catálogo"""

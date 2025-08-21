@@ -1,6 +1,9 @@
 from datetime import date, timedelta
-from typing import Optional
-from src.models.item import ItemBiblioteca
+from typing import Optional, TYPE_CHECKING
+from models.item import ItemBiblioteca
+
+if TYPE_CHECKING:
+    from models.usuario import Usuario
 
 class Emprestimo:
     """Representa um empréstimo de um item para um usuário"""
