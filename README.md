@@ -78,23 +78,6 @@ def emprestar(item: ItemBiblioteca):
     prazo = item.dias_de_emprestimo()  # Polimorfismo em ação
 ```
 
-## Funcionalidades
-
-1. **Gestão de Itens**
-   - Cadastro de livros e revistas
-   - Controle de estoque
-   - Pesquisa por código/título/tipo
-
-2. **Gestão de Usuários**
-   - Cadastro de usuários
-   - Limite de empréstimos
-   - Pesquisa por ID/nome
-
-3. **Gestão de Empréstimos**
-   - Realização de empréstimos
-   - Devoluções
-   - Pesquisa por status/item/usuário
-
 ## Como Executar
 ```bash
 python src/main.py
