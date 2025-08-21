@@ -1,6 +1,6 @@
-from src.biblioteca import Biblioteca
-from src.item import Livro, Revista
-from src.usuario import Usuario
+from src.controllers.biblioteca import Biblioteca
+from src.models.item import Livro, Revista
+from src.models.usuario import Usuario
 
 def demo():
     print(">>> Biblioteca base")

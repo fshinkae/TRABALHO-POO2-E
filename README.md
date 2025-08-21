@@ -1,115 +1,109 @@
-# Sistema de Biblioteca - Aprendendo POO na Prática
+# Sistema de Biblioteca - Aplicando POO
 
-Este projeto é uma refatoração de um sistema de biblioteca para demonstrar os conceitos fundamentais da Programação Orientada a Objetos (POO). Vamos entender como cada conceito foi aplicado de forma prática!
+Este projeto é uma refatoração de um sistema de biblioteca demonstrando os 4 pilares da Programação Orientada a Objetos (POO).
 
-## O que é POO?
+## Estrutura do Projeto
 
-Programação Orientada a Objetos é uma forma de organizar o código pensando em "objetos" do mundo real. Por exemplo, em uma biblioteca temos livros, revistas, usuários e empréstimos. Cada um desses é um objeto com suas próprias características e comportamentos.
+```
+src/
+├── models/              # Classes que representam as entidades do sistema
+│   ├── item.py         # ItemBiblioteca (abstrata), Livro e Revista
+│   ├── usuario.py      # Classe Usuario
+│   └── emprestimo.py   # Classe Emprestimo
+├── controllers/         # Classes que controlam a lógica do sistema
+│   └── biblioteca.py   # Classe Biblioteca (controle principal)
+└── main.py             # Interface com usuário
+```
 
 ## Os 4 Pilares da POO Explicados
 
 ### 1. Abstração 🎯
-**O que é?** É como criar um "modelo" simplificado de algo do mundo real no código.
+**O que é?** Simplificar conceitos do mundo real em classes.
 
-**Exemplo Prático:**
-- Criamos uma classe `ItemBiblioteca` que representa qualquer item que pode ser emprestado
-- Definimos as características básicas: código, título, ano e estoque
-- É como criar uma "forma de bolo" que define o formato básico, mas não é o bolo em si!
+**Como foi aplicado:**
+- Classe abstrata `ItemBiblioteca` define o modelo básico de um item
+- Métodos abstratos definem comportamentos obrigatórios
+- Cada classe representa um conceito do mundo real (Livro, Revista, Usuario)
 
 ```python
-class ItemBiblioteca:
-    def __init__(self, codigo, titulo, ano, estoque):
-        self.codigo = codigo
-        self.titulo = titulo
-        self.ano = ano
-        self.estoque = estoque
+class ItemBiblioteca(ABC):
+    @abstractmethod
+    def dias_de_emprestimo(self) -> int:
+        pass
 ```
 
 ### 2. Encapsulamento 🔒
-**O que é?** É como criar uma "caixa preta" que protege as informações internas do objeto.
+**O que é?** Proteger os dados internos da classe.
 
-**Exemplo Prático:**
-- Protegemos os dados dos usuários usando `_` antes do nome das variáveis
-- Criamos métodos específicos para acessar e modificar esses dados
-- É como um cofre: você só pode mexer no dinheiro usando os métodos certos!
+**Como foi aplicado:**
+- Atributos protegidos com `_` (ex: `_nome`, `_usuarios`)
+- Uso de `@property` para acesso controlado
+- Métodos específicos para manipular dados
 
 ```python
 class Usuario:
-    def __init__(self, nome):
-        self._nome = nome  # Protegido
+    def __init__(self, nome: str):
+        self._nome = nome
     
     @property
-    def nome(self):  # Método para acessar o nome
+    def nome(self) -> str:
         return self._nome
 ```
 
 ### 3. Herança 👨‍👦
-**O que é?** É como criar "versões especializadas" de uma classe base.
+**O que é?** Criar novas classes baseadas em classes existentes.
 
-**Exemplo Prático:**
-- Criamos `Livro` e `Revista` que herdam de `ItemBiblioteca`
-- Cada um tem suas próprias regras de empréstimo
-- É como dizer que tanto livro quanto revista são itens de biblioteca, mas com algumas diferenças!
+**Como foi aplicado:**
+- `Livro` e `Revista` herdam de `ItemBiblioteca`
+- Compartilham atributos comuns (código, título, ano)
+- Cada subclasse implementa seus comportamentos específicos
 
 ```python
 class Livro(ItemBiblioteca):
-    def dias_de_emprestimo(self):
-        return 14  # Livros podem ser emprestados por 14 dias
-
-class Revista(ItemBiblioteca):
-    def dias_de_emprestimo(self):
-        return 7   # Revistas apenas 7 dias
+    def dias_de_emprestimo(self) -> int:
+        return 14  # Específico para livros
 ```
 
 ### 4. Polimorfismo 🔄
-**O que é?** É a capacidade de tratar diferentes tipos de objetos de forma uniforme.
+**O que é?** Tratar diferentes classes de forma uniforme.
 
-**Exemplo Prático:**
-- Podemos emprestar qualquer tipo de item (livro ou revista) da mesma forma
-- Cada tipo de item sabe quanto tempo pode ser emprestado
-- É como ter um controle remoto universal que funciona em diferentes TVs!
+**Como foi aplicado:**
+- Diferentes implementações de `dias_de_emprestimo()`
+- Sistema trata qualquer `ItemBiblioteca` da mesma forma
+- Cada tipo de item pode ter comportamento próprio
 
 ```python
-# Funciona tanto para livros quanto para revistas
-def emprestar(item):
-    prazo = item.dias_de_emprestimo()  # Cada item sabe seu prazo
-    print(f"Emprestado por {prazo} dias")
+# Funciona para qualquer ItemBiblioteca
+def emprestar(item: ItemBiblioteca):
+    prazo = item.dias_de_emprestimo()  # Polimorfismo em ação
 ```
 
-## Como o Sistema Funciona
+## Funcionalidades
 
-1. **Cadastro de Itens:**
-   - Podemos adicionar livros e revistas
-   - Cada um tem seu próprio prazo de empréstimo
+1. **Gestão de Itens**
+   - Cadastro de livros e revistas
+   - Controle de estoque
+   - Pesquisa por código/título/tipo
 
-2. **Cadastro de Usuários:**
-   - Cada usuário tem um limite de empréstimos
-   - Sistema controla quantos itens foram emprestados
+2. **Gestão de Usuários**
+   - Cadastro de usuários
+   - Limite de empréstimos
+   - Pesquisa por ID/nome
 
-3. **Empréstimos:**
-   - Verifica se o usuário pode pegar emprestado
-   - Controla os prazos automaticamente
-   - Permite devoluções
+3. **Gestão de Empréstimos**
+   - Realização de empréstimos
+   - Devoluções
+   - Pesquisa por status/item/usuário
 
 ## Como Executar
 ```bash
 python src/main.py
 ```
 
-## Estrutura do Projeto
-```
-src/
-  ├── item.py         # Define ItemBiblioteca, Livro e Revista
-  ├── usuario.py      # Define a classe Usuario
-  ├── emprestimo.py   # Controla os empréstimos
-  ├── biblioteca.py   # Gerencia todo o sistema
-  └── main.py         # Interface com o usuário
-```
-
 ## Histórico de Desenvolvimento
 1. ✅ Criação da estrutura base do projeto
-2. ✅ Implementação das classes abstratas
-3. ✅ Adição do encapsulamento para proteção dos dados
-4. ✅ Criação da hierarquia de itens (herança)
-5. ✅ Implementação do tratamento polimórfico
-6. ✅ Adição da interface de usuário
+2. ✅ Implementação da classe abstrata ItemBiblioteca
+3. ✅ Desenvolvimento das classes concretas (Livro, Revista)
+4. ✅ Implementação do controle de usuários
+5. ✅ Sistema de empréstimos
+6. ✅ Interface de usuário
