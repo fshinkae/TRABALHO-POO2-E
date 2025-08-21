@@ -22,3 +22,21 @@ class ItemBiblioteca(ABC):
     
     def __str__(self) -> str:
         return f"{self.get_tipo().title()}('{self.titulo}', {self.ano})"
+
+class Livro(ItemBiblioteca):
+    """Representa um livro na biblioteca"""
+    
+    def dias_de_emprestimo(self) -> int:
+        return 14
+    
+    def get_tipo(self) -> str:
+        return "livro"
+
+class Revista(ItemBiblioteca):
+    """Representa uma revista na biblioteca"""
+    
+    def dias_de_emprestimo(self) -> int:
+        return 7  # Revistas têm prazo menor de empréstimo
+    
+    def get_tipo(self) -> str:
+        return "revista"
