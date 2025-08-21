@@ -12,6 +12,8 @@ src/
 │   └── emprestimo.py   # Classe Emprestimo
 ├── controllers/         # Classes que controlam a lógica do sistema
 │   └── biblioteca.py   # Classe Biblioteca (controle principal)
+├── exceptions/         # Exceções personalizadas do sistema
+│   └── biblioteca_exceptions.py
 └── main.py             # Interface com usuário
 ```
 
@@ -83,6 +85,48 @@ def emprestar(item: ItemBiblioteca):
 python src/main.py
 ```
 
+## Tratamento de Exceções 🚨
+
+O sistema implementa um conjunto robusto de exceções personalizadas para lidar com diferentes situações de erro:
+
+### Exceções Disponíveis
+
+1. `ItemNaoEncontradoError`
+   - Lançada quando um item não é encontrado no catálogo
+   - Ex: Tentar emprestar um livro que não existe
+
+2. `UsuarioNaoEncontradoError`
+   - Lançada quando um usuário não é encontrado no sistema
+   - Ex: Tentar realizar operações com um usuário inexistente
+
+3. `ItemIndisponivelError`
+   - Lançada quando um item não tem unidades disponíveis
+   - Ex: Tentar emprestar um livro sem estoque
+
+4. `LimiteEmprestimosError`
+   - Lançada quando um usuário atinge seu limite de empréstimos
+   - Ex: Usuário tenta pegar mais livros que seu limite permite
+
+5. `EmprestimoNaoEncontradoError`
+   - Lançada quando não é encontrado um empréstimo em aberto
+   - Ex: Tentar devolver um item que não está emprestado
+
+6. `ItemJaEmprestadoError`
+   - Lançada quando um usuário tenta emprestar um item que já possui
+   - Ex: Tentar emprestar o mesmo livro duas vezes
+
+### Como as Exceções São Tratadas
+
+```python
+try:
+    biblioteca.emprestar("U1", "L001")
+    print("✓ Empréstimo realizado com sucesso")
+except ItemIndisponivelError as e:
+    print(f"✗ Erro: {e}")
+except LimiteEmprestimosError as e:
+    print(f"✗ Erro: {e}")
+```
+
 ## Histórico de Desenvolvimento
 1. ✅ Criação da estrutura base do projeto
 2. ✅ Implementação da classe abstrata ItemBiblioteca
@@ -90,3 +134,4 @@ python src/main.py
 4. ✅ Implementação do controle de usuários
 5. ✅ Sistema de empréstimos
 6. ✅ Interface de usuário
+7. ✅ Tratamento de exceções

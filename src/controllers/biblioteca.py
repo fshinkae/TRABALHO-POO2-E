@@ -2,6 +2,14 @@ from typing import Dict, List, Optional
 from models.item import ItemBiblioteca
 from models.usuario import Usuario
 from models.emprestimo import Emprestimo
+from exceptions.biblioteca_exceptions import (
+    ItemNaoEncontradoError,
+    UsuarioNaoEncontradoError,
+    ItemIndisponivelError,
+    LimiteEmprestimosError,
+    EmprestimoNaoEncontradoError,
+    ItemJaEmprestadoError
+)
 
 class Biblioteca:
     """Gerencia o catálogo de itens, usuários e empréstimos da biblioteca"""
@@ -37,7 +45,7 @@ class Biblioteca:
     def buscar_item(self, codigo: str) -> ItemBiblioteca:
         """Busca um item pelo código"""
         if codigo not in self._catalogo:
-            raise KeyError("Item não encontrado")
+            raise ItemNaoEncontradoError(f"Item com código '{codigo}' não encontrado")
         return self._catalogo[codigo]
     
     def cadastrar_usuario(self, usuario: Usuario) -> None:
@@ -49,7 +57,7 @@ class Biblioteca:
     def buscar_usuario(self, id_usuario: str) -> Usuario:
         """Busca um usuário pelo ID"""
         if id_usuario not in self._usuarios:
-            raise KeyError("Usuário não encontrado")
+            raise UsuarioNaoEncontradoError(f"Usuário com ID '{id_usuario}' não encontrado")
         return self._usuarios[id_usuario]
     
     def emprestar(self, id_usuario: str, codigo_item: str) -> Emprestimo:
@@ -57,11 +65,16 @@ class Biblioteca:
         usuario = self.buscar_usuario(id_usuario)
         item = self.buscar_item(codigo_item)
         
+        # Verifica se o usuário já tem este item emprestado
+        for emp in self._emprestimos:
+            if emp.usuario is usuario and emp.item is item and emp.em_aberto:
+                raise ItemJaEmprestadoError(f"O item '{item.titulo}' já está emprestado para {usuario.nome}")
+        
         if not usuario.pode_emprestar():
-            raise ValueError("Usuário atingiu o limite de empréstimos")
+            raise LimiteEmprestimosError(f"Usuário {usuario.nome} atingiu o limite de empréstimos")
             
         if item.estoque <= 0:
-            raise ValueError("Sem unidades disponíveis")
+            raise ItemIndisponivelError(f"Item '{item.titulo}' não possui unidades disponíveis")
             
         item.estoque -= 1
         emp = Emprestimo(item, usuario)
@@ -81,7 +94,9 @@ class Biblioteca:
         )
         
         if not emprestimo:
-            raise ValueError("Empréstimo em aberto não encontrado")
+            raise EmprestimoNaoEncontradoError(
+                f"Não foi encontrado empréstimo em aberto do item '{item.titulo}' para o usuário {usuario.nome}"
+            )
             
         emprestimo.devolver()
         item.estoque += 1
